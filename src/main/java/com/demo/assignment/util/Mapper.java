@@ -23,11 +23,11 @@ public class Mapper {
         invoice.setConsultation(request.getConsultation());
         invoice.setConsumable(request.getConsumable());
         invoice.setInvestigations(request.getInvestigations());
-        invoice.setBillAmount(totalBillAmount(request));
+        invoice.setBillAmount(totalBillAmount(invoice));
         return invoice;
     }
 
-    private int totalBillAmount(InvoiceRequest request) {
+    private int totalBillAmount(Invoice request) {
         int amount;
         amount = request.getRoomCharges() + request.getPharmacy() + request.getMedicalEquipment() +
                 request.getConsultation() + request.getConsumable() + request.getInvestigations();
@@ -58,6 +58,7 @@ public class Mapper {
         }
         return dtoList;
     }
+
     public List<InvoiceDTO> convertEntityToDTOList(List<Invoice> invoices) {
         List<InvoiceDTO> dtoList = new ArrayList<>();
         for (Invoice invoice : invoices) {
@@ -79,16 +80,17 @@ public class Mapper {
 
     public Invoice updateMapping(Invoice oldInvoice, InvoiceRequest newInvoice) {
         oldInvoice.setIpNumber(newInvoice.getIpNumber() != null ? newInvoice.getIpNumber() : oldInvoice.getIpNumber());
-        oldInvoice.setRoomCharges(newInvoice.getRoomCharges());
-        oldInvoice.setPharmacy(newInvoice.getPharmacy());
-        oldInvoice.setMedicalEquipment(newInvoice.getMedicalEquipment());
-        oldInvoice.setConsultation(newInvoice.getConsultation());
-        oldInvoice.setConsumable(newInvoice.getConsumable());
-        oldInvoice.setInvestigations(newInvoice.getInvestigations());
-        oldInvoice.setBillAmount(newInvoice.getBillAmount());
+        oldInvoice.setRoomCharges(newInvoice.getRoomCharges() != 0 ? newInvoice.getRoomCharges() : oldInvoice.getRoomCharges());
+        oldInvoice.setPharmacy(newInvoice.getPharmacy() != 0 ? newInvoice.getPharmacy() : oldInvoice.getPharmacy());
+        oldInvoice.setMedicalEquipment(newInvoice.getMedicalEquipment() != 0 ? newInvoice.getMedicalEquipment() : oldInvoice.getMedicalEquipment());
+        oldInvoice.setConsultation(newInvoice.getConsultation() != 0 ? newInvoice.getConsultation() : oldInvoice.getConsultation());
+        oldInvoice.setConsumable(newInvoice.getConsumable() != 0 ? newInvoice.getConsumable() : oldInvoice.getConsumable());
+        oldInvoice.setInvestigations(newInvoice.getInvestigations() != 0 ? newInvoice.getInvestigations() : oldInvoice.getInvestigations());
+        oldInvoice.setBillAmount(totalBillAmount(oldInvoice));
         return oldInvoice;
     }
-    public PatientDTO getPatientDTO(Patient patient){
+
+    public PatientDTO getPatientDTO(Patient patient) {
         PatientDTO dto = new PatientDTO();
         dto.setId(patient.getId());
         dto.setName(patient.getName());
